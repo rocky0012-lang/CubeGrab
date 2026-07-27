@@ -1,9 +1,9 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { LoaderCircle, ScanFace } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface LiveSelfieCardProps {
-    onImageSelected?: (file: File) => void;
+    onImageSelected?: (file: File | null) => void;
 }
 
 const LiveSelfieCard = ({ onImageSelected }: LiveSelfieCardProps) => {
@@ -14,11 +14,25 @@ const LiveSelfieCard = ({ onImageSelected }: LiveSelfieCardProps) => {
     const [cameraError, setCameraError] = useState<string | null>(null);
     const [capturedSelfie, setCapturedSelfie] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
+    const verificationStep = 
+        preview 
+            ? 2
+            :cameraActive
+            ? 1
+            : 0;
+
+
+    useEffect(() => {
+        return () => {
+            if (preview) URL.revokeObjectURL(preview);
+            const stream = videoRef.current?.srcObject as MediaStream | null;
+            stream?.getTracks().forEach(track => track.stop());
+        };
+    }, [preview]);
 
     const startCamera = async () => {
         if (cameraActive || loadingCamera || preview) return;
 
-        console.log("1. startCamera called");
         try {
             setLoadingCamera(true);
 
@@ -26,26 +40,17 @@ const LiveSelfieCard = ({ onImageSelected }: LiveSelfieCardProps) => {
                 video: { facingMode: "user" },
             });
 
-            console.log("2. stream obtained");
-
-            console.log("3. videoRef.current:", videoRef.current);
 
             if (videoRef.current) {
-                console.log("Video element exists, setting srcObject to stream");
                 videoRef.current.srcObject = stream;
-                console.log("stream attached")
                 
                 try {
                     await videoRef.current.play();
-                    console.log("video started");
                 } catch (err) {
-                    console.error("video play failed:", err);
                 }
 
-                console.log("setting camera active...")
                 setCameraActive(true);
             } else {
-                console.log("❌ videoRef.current is null");
             }
         } catch {
             setCameraError("Camera permission denied. Please allow access to the camera.");
@@ -53,8 +58,6 @@ const LiveSelfieCard = ({ onImageSelected }: LiveSelfieCardProps) => {
             setLoadingCamera(false);
         }
     };
-    console.log("Preview:", preview);
-    console.log("cameraActive:", cameraActive);
     
     const captureSelfie = () => {
             if (!videoRef.current || !canvasRef.current) return;
@@ -98,7 +101,6 @@ const LiveSelfieCard = ({ onImageSelected }: LiveSelfieCardProps) => {
                 //Save the captured selfie to state
                 setCapturedSelfie(selfieFile);
                 setPreview(previewUrl);
-                console.log("preview URL:", previewUrl);
 
                 const stream = video.srcObject as MediaStream | null;
 
@@ -108,13 +110,23 @@ const LiveSelfieCard = ({ onImageSelected }: LiveSelfieCardProps) => {
 
                 setCameraActive(false);
                 
-
                 //Send the file to the parent Page
                 onImageSelected?.(selfieFile);
 
-                console.log("✅ Selfie captured and sent to parent component:", selfieFile);
             }, "image/png", 0.95);
-            };
+    };
+
+    const retakeSelfie = () => {
+        if (preview) {
+            URL.revokeObjectURL(preview);
+        }
+            setPreview(null);
+            setCapturedSelfie(null);
+
+            onImageSelected?.(null);
+
+            return;
+    }
 
   return (
     <div className="flex flex-col items-center gap-4 pt-2">
@@ -124,8 +136,16 @@ const LiveSelfieCard = ({ onImageSelected }: LiveSelfieCardProps) => {
         </p>
         <div 
             className={`relative flex h-72 w-72 items-center justify-center overflow-hidden rounded-full bg-gray-900 shadow-[0_0_30px_rgba(212,175,55,0.15)] ${!preview ? "cursor-pointer hover:scale-[1.02]" : "cursor-default"} transition-all`}
+            role="button"
+            tabIndex={0}
             onClick={() => {
                 if (!cameraActive && !preview) {
+                    startCamera();
+                }
+            }}
+            onKeyDown={(e) => {
+                if ((e.key === 'Enter' || e.key === '') && !cameraActive && !preview) {
+                    e.preventDefault();
                     startCamera();
                 }
             }}
@@ -152,7 +172,7 @@ const LiveSelfieCard = ({ onImageSelected }: LiveSelfieCardProps) => {
             {loadingCamera && (
                 <LoaderCircle className="absolute z-30 size-12 animate-spin text-[var(--color-accent-gold)]" />
             )}
-            { !cameraActive && !loadingCamera && (
+            { !cameraActive && !loadingCamera && !preview && (
                 <ScanFace 
                     className="relative z-20 size-24 text-[var(--color-accent-gold)] opacity-90" />
             )}            
@@ -169,8 +189,8 @@ const LiveSelfieCard = ({ onImageSelected }: LiveSelfieCardProps) => {
         </div>
             <Button 
                 type="button"
-                onClick={captureSelfie}
-                disabled={!cameraActive}
+                onClick={preview ? retakeSelfie : captureSelfie}
+                disabled={!cameraActive && !preview}
                 className="w-full max-w-xs bg-[var(--color-accent-gold-light)] text-black hover:bg-[var(--color-accent-gold-dark)] focus:ring-[var(--color-accent-gold)] disabled:cursor-not-allowed disabled:opacity-50"
             >
                 {preview ? "Retake Selfie" : "Capture Selfie"}
@@ -179,9 +199,16 @@ const LiveSelfieCard = ({ onImageSelected }: LiveSelfieCardProps) => {
             {cameraError ?? "Tap to enable your camera"}
         </p>
         <div className="mt-2 flex items-center gap-2">
-             <span className="h-2 w-2 rounded-full bg-[var(--color-accent-gold)]" />
-            <div className="h-2 w-2 rounded-full bg-gray-400" />
-            <div className="h-2 w-2 rounded-full bg-gray-400" />
+            {[1,2,3].map((step) => (
+                <span
+                    key={step}
+                    className={`h-2 w-2 rounded-full transition-colors 
+                        ${verificationStep >= step 
+                            ? "bg-[var(--color-accent-gold)]"
+                            : "bg-gray-400"
+                        }`}
+                    />
+            ))}
         </div>
     </div>
   )

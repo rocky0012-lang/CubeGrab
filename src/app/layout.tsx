@@ -25,8 +25,8 @@ export default function RootLayout({
     lang="en" 
     className={`${monaSans.className} h-full antialiased`}>
       <body className="min-h-full flex flex-col text-foreground">
-        <Toaster richColors position="top-right" toastOptions={{className:"border border-var[var(--color-accent-gold)] bg-[var(--color-background)] text-foreground",}} />
         <ThemeProvider>
+          <Toaster richColors position="top-right" toastOptions={{className:"border border-var[var(--color-accent-gold)] bg-[var(--color-background)] text-foreground",}} />
           <RouteProvider>
             {children}
           </RouteProvider>
