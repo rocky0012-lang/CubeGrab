@@ -13,12 +13,24 @@ import { useTheme } from "next-themes";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
+import { 
+    AlertDialog, 
+    AlertDialogAction, 
+    AlertDialogCancel, 
+    AlertDialogContent, 
+    AlertDialogDescription, 
+    AlertDialogFooter, 
+    AlertDialogHeader, 
+    AlertDialogTitle 
+} from "../ui/alert-dialog";
+
 
 export const DropdownAvatar = () => {
     const { profile, loading } = useProfile();
 
     const { resolvedTheme, setTheme } = useTheme();
     const [ mounted, setMounted ] = useState(false);
+    const [ openLogoutDialog, setOpenLogoutDialog ] = useState(false);
     const isDark = mounted && resolvedTheme === "dark";
     const router = useRouter();
     const supabase = createClient();
@@ -43,6 +55,7 @@ export const DropdownAvatar = () => {
 
 
     return (
+        <>
         <Dropdown.Root>
             <AriaButton
                 className={({ isPressed, isFocusVisible }) =>
@@ -100,11 +113,48 @@ export const DropdownAvatar = () => {
 
                 </Dropdown.Menu>
                 <div className="flex flex-col gap-3 border-t border-secondary p-3">
-                    <Button size="xs" color="secondary-destructive" iconLeading={LogOut01} className="text-center hover:bg-red-500 hover:text-white transition-colors" onClick={handleLogout} >
+                    <Button 
+                        size="xs" 
+                        color="secondary-destructive" 
+                        iconLeading={LogOut01} 
+                        className="text-center hover:bg-red-500 hover:text-white transition-colors" 
+                        onClick={() => setOpenLogoutDialog(true)} 
+                    >
                         Sign out
                     </Button>
                 </div>
             </Dropdown.Popover>
         </Dropdown.Root>
+
+        <AlertDialog 
+            open={openLogoutDialog}
+            onOpenChange={setOpenLogoutDialog}
+        >
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>
+                        Are you sure you want to sign out?
+                    </AlertDialogTitle>
+
+                    <AlertDialogDescription>
+                        You will need to sign in again to access your account.
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+
+                <AlertDialogFooter>
+                    <AlertDialogCancel>
+                        Cancel
+                    </AlertDialogCancel>
+
+                    <AlertDialogAction
+                        onClick={handleLogout}
+                        className="bg-red-600 text-white hover:bg-red-700"
+                    >
+                        Sign out
+                    </AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+        </>
     );
 };

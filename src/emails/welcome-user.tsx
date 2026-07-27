@@ -1,0 +1,40 @@
+import { Button, Text } from "@react-email/components"
+import EmailLayout from "./components/EmailLayout"
+
+interface WelcomeUserEmailProps {
+    firstName: string;
+}
+
+export default function WelcomeUserEmail({
+    firstName,
+}: WelcomeUserEmailProps) {
+    return (
+        <EmailLayout
+            preview="Welcome to CubeGrab!"
+            title={`Welcome, ${firstName}!`}
+            >
+                <Text style={{ color: "#ffffff" }}>
+                    Thank you for joining CubeGrab.
+                </Text>
+
+                <Text style={{ color: "#d1d5db" }}>
+                    We're excited to help you find your next place with confidence and security. Our platform is designed to make your experience seamless and enjoyable.
+                </Text>
+
+                <Button
+                    href="https://cubegrab.com"
+                    style={{
+                        backgroundColor: "#D4AF37",
+                        color: "#000000",
+                        padding: "12px 24px",
+                        borderRadius: "8px",
+                        textDecoration: "none",
+                        fontWeight: "bold",
+                        alignItems: "center",
+                    }}
+                >
+                    Open CubeGrab
+                </Button>
+            </EmailLayout>
+    );
+}

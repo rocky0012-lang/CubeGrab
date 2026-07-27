@@ -11,12 +11,58 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import LiveSelfieCard from "@/components/reusable/live-selfie-card";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
+
+
+
+const IdentityVerificationSchema = z.object({
+    idNumber: z
+      .string()
+      .trim()
+      .min(6, "ID/Passport number is too short.")
+      .max(20, "ID/Passport number is too long.")
+      .regex(/^[a-zA-Z0-9]+$/, "ID/Passport number can only contain letters and numbers."),
+  })
+
+type IdentityVerificationFormData = z.infer<typeof IdentityVerificationSchema>
 
 const IdentityVerification = () => {
   const [ frontId, setFrontId ] = useState<File | null>(null);
   const [ backId, setBackId ] = useState<File | null>(null);
+  const [ selfie, setSelfie ] = useState<File | null>(null);
+  const { register,
+          handleSubmit,
+          watch,
+          formState: { errors },
+  } = useForm<IdentityVerificationFormData>({
+    resolver: zodResolver(IdentityVerificationSchema),
+    mode: "onBlur",
+  });
+  const idNumber = watch("idNumber");
+  const canContinue = 
+    Boolean (
+      idNumber?.trim() &&
+      frontId &&
+      backId &&
+      selfie
+    );
+
+  const onSubmit = (data: IdentityVerificationFormData) => {
+    const verificationPayLoad = {
+      ...data,
+      frontId,
+      backId,
+      selfie,
+    };
+
+    console.log("Verification Payload:", verificationPayLoad);
+  };
+
   return (
     <main className=" flex flex-col items-center justify-center py-6 px-2">
         <CubeGrabLogo 
@@ -39,8 +85,14 @@ const IdentityVerification = () => {
                 type="text"
                 placeholder="Enter your ID or passport number"
                 /* Added pr-10 to prevent text from overlapping with the icon */
-                className="w-full p-2 pr-10 border h-10 placeholder:[color:var(--color-text-tertiary)] rounded-md" 
+                className="w-full p-2 pr-10 border border-[color:var(--color-accent-gold)] focus-visible:ring-[color:var(--color-accent-gold)] h-10 placeholder:[color:var(--color-text-tertiary)] rounded-md" 
+                {...register("idNumber")}
               />
+              {errors.idNumber && (
+                <p className="mt-2 text-sm text-destructive">
+                  {errors.idNumber.message}
+                </p>
+              )}
               <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                 <IdCard className="h-5 w-5 text-fg-tertiary" />
               </div>
@@ -69,7 +121,17 @@ const IdentityVerification = () => {
             <p>Back: {backId?.name ?? "Not selected"}</p>
           </div>
         </div>
-        <LiveSelfieCard />
+        <LiveSelfieCard 
+          onImageSelected={(file) => setSelfie(file)}
+        />
+
+        <Button 
+          disabled={!canContinue}
+          onClick={handleSubmit(onSubmit)}
+          className="w-full max-w-md mt-6 bg-[var(--color-accent-gold-light)] text-black hover:bg-[var(--color-accent-gold-dark)] focus:ring-[var(--color-accent-gold)] disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {canContinue ? "Continue" : "Complete verification"}
+        </Button>
     </main>
   )
 }

@@ -94,13 +94,13 @@ export const Avatar = ({
     className,
     contentClassName,
 }: AvatarProps) => {
-    const [isFailed, setIsFailed] = useState(false);
+    const [failedSrc, setFailedSrc] = useState<string | null>(null);
 
-    const canShowImage = src && !isFailed;
+    const canShowImage = Boolean(src && src !== failedSrc);
 
     const renderMainContent = () => {
         if (canShowImage) {
-            return <img data-avatar-img className="size-full object-cover" src={src} alt={alt} onError={() => setIsFailed(true)} />;
+            return <img data-avatar-img className="size-full object-cover" src={src} alt={alt} onError={() => setFailedSrc(src ?? null)} />;
         }
 
         if (initials) {

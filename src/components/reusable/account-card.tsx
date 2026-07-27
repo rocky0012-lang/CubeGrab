@@ -107,14 +107,15 @@ export const DropdownAccountCardSM = ({ redirectTo }: DropdownAccountCardSMProps
                         <Dropdown.Separator />
                 
                         
+                        <Dropdown.Item 
+                            icon={LogOut01}
+                            className="text-red-500"
+                            onAction={() => setOpenLogOutDialog(true)}
+                        >
+                            Sign out
+                        </Dropdown.Item>
                     </Dropdown.Menu>
-                    <Dropdown.Item 
-                        icon={LogOut01}
-                        className="text-red-500"
-                        onAction={() => setOpenLogOutDialog(true)}
-                    >
-                        Sign out
-                    </Dropdown.Item>
+
                     <div className="flex justify-between border-t border-secondary px-4 py-3">
                         <span className="truncate text-sm text-quaternary">&copy; CubeGrab Inc</span>
                         <span className="text-sm text-quaternary">2026</span>
@@ -128,7 +129,7 @@ export const DropdownAccountCardSM = ({ redirectTo }: DropdownAccountCardSMProps
             >
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Are you sure you want to log out?</AlertDialogTitle>
+                        <AlertDialogTitle>Sign out?</AlertDialogTitle>
                         <AlertDialogDescription>
                             Are you sure you want to sign out of your CubeGrab account?
                             You'll need to sign in to continue.

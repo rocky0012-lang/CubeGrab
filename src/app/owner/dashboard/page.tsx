@@ -13,7 +13,7 @@ const OwnerDashboard = () => {
       </div>
       <div className="flex items-center flex-wrap gap-4">
         <LogoutDialog
-          redirectTo="owner-signin"
+          redirectTo="/owner-signin"
         />
         <DropdownAccountCardSM 
           redirectTo="/owner-signin"
