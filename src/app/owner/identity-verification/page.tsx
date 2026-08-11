@@ -43,24 +43,27 @@ const IdentityVerification = () => {
     resolver: zodResolver(IdentityVerificationSchema),
     mode: "onBlur",
   });
-  const idNumber = watch("idNumber");
+  const values = watch();
+  
+  const isFormValid = IdentityVerificationSchema.safeParse(values).success;
+
   const canContinue = 
-    Boolean (
-      idNumber?.trim() &&
-      frontId &&
-      backId &&
-      selfie
-    );
+      isFormValid &&
+      !!frontId &&
+      !!backId &&
+      !!selfie
+  ;
 
   const onSubmit = (data: IdentityVerificationFormData) => {
-    const verificationPayLoad = {
+    const verificationPayload = {
       ...data,
       frontId,
       backId,
       selfie,
     };
 
-    console.log("Verification Payload:", verificationPayLoad);
+    //TODO
+    // Send verificationPayload to the backend for processing and verification
   };
 
   return (

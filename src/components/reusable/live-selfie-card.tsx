@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { LoaderCircle, ScanFace } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
+
 interface LiveSelfieCardProps {
     onImageSelected?: (file: File | null) => void;
 }
@@ -21,12 +22,20 @@ const LiveSelfieCard = ({ onImageSelected }: LiveSelfieCardProps) => {
             ? 1
             : 0;
 
+    useEffect(() => {
+        return () => {
+            const stream = videoRef.current?.srcObject as MediaStream | null;
+
+            stream?.getTracks().forEach((track) => track.stop());
+        };
+    }, []);
+
 
     useEffect(() => {
         return () => {
-            if (preview) URL.revokeObjectURL(preview);
-            const stream = videoRef.current?.srcObject as MediaStream | null;
-            stream?.getTracks().forEach(track => track.stop());
+            if (preview) {
+                URL.revokeObjectURL(preview);
+            }
         };
     }, [preview]);
 
@@ -41,16 +50,21 @@ const LiveSelfieCard = ({ onImageSelected }: LiveSelfieCardProps) => {
             });
 
 
-            if (videoRef.current) {
-                videoRef.current.srcObject = stream;
-                
-                try {
-                    await videoRef.current.play();
-                } catch (err) {
-                }
+            const video = videoRef.current;
+            if (!video) {
+                stream.getTracks().forEach((track) => track.stop());
+                return;
+            }
 
+            video.srcObject = stream;
+            try {
+                await video.play();
                 setCameraActive(true);
-            } else {
+            } catch (err) {
+                console.error("Error playing video:", err);
+                stream.getTracks().forEach((track) => track.stop());
+                video.srcObject = null;
+                setCameraError("Unable to start the camera preview.");
             }
         } catch {
             setCameraError("Camera permission denied. Please allow access to the camera.");
@@ -106,7 +120,9 @@ const LiveSelfieCard = ({ onImageSelected }: LiveSelfieCardProps) => {
 
                 stream?.getTracks().forEach(track => track.stop());
 
-                video.srcObject = null;
+                if (videoRef.current) {
+                    videoRef.current.srcObject = null;
+                }
 
                 setCameraActive(false);
                 
@@ -144,7 +160,7 @@ const LiveSelfieCard = ({ onImageSelected }: LiveSelfieCardProps) => {
                 }
             }}
             onKeyDown={(e) => {
-                if ((e.key === 'Enter' || e.key === '') && !cameraActive && !preview) {
+                if ((e.key === 'Enter' || e.key === ' ') && !cameraActive && !preview) {
                     e.preventDefault();
                     startCamera();
                 }

@@ -28,6 +28,8 @@ import {
 } from "@/components/ui/field"
 import { CubeGrabLogo } from "../reusable/cubegrab-logo"
 import { useEffect } from "react"
+import { getData } from 'country-list'
+
 
 const signupSchema = z.object({
   firstName: z.string().min(1, "First name is required."),
@@ -38,6 +40,10 @@ const signupSchema = z.object({
     .refine((value) => isPossiblePhoneNumber(value || ''), {
       message: "Please enter a valid phone number.",
     }),
+  country: z.object({
+    code: z.string().min(1, "Country is required."),
+    name: z.string().min(1, "Country is required."),
+  }),
   password: z.string().min(8, "Password must contain 8+ characters."),
   confirmPassword: z.string(),
   terms: z.boolean().refine((val) => val === true, {
@@ -58,6 +64,7 @@ export function OwnerSignupForm() {
 
   const router = useRouter()
   const supabase = createClient();
+  const countryList = getData();
 
   useEffect(() => {
       if (!formSuccess) return;
@@ -89,6 +96,7 @@ export function OwnerSignupForm() {
       lastName: "",
       email: "",
       phoneNumber: "",
+      country: { code: "", name: "" },
       password: "",
       confirmPassword: "",
       terms: false,
@@ -129,6 +137,8 @@ export function OwnerSignupForm() {
           data: {
             full_name: `${data.firstName} ${data.lastName}`,
             phone_number: data.phoneNumber,
+            country_code: data.country.code,
+            country_name: data.country.name,
             verification_status: "pending",
             user_role: "owner",
           },
@@ -261,6 +271,43 @@ export function OwnerSignupForm() {
                 />
               </FieldContent>
               <FieldError>{errors.phoneNumber?.message}</FieldError>
+            </Field>
+
+            {/* Country field */}
+            <Field data-invalid={!!errors.country}>
+              <FieldLabel htmlFor="country-select">Country of Residence</FieldLabel>
+              <FieldContent>
+                <Controller
+                  name="country"
+                  control={control}
+                  render={({ field }) => (
+                    <select
+                      id="country-select"
+                      className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                      value={field.value?.code ?? ""}
+                      onChange={(event) => {
+                        const selectedCountry = countryList.find(
+                          (country) => country.code === event.target.value
+                        );
+
+                        field.onChange(
+                          selectedCountry
+                            ? { code: selectedCountry.code, name: selectedCountry.name }
+                            : { code: "", name: "" }
+                        );
+                      }}
+                    >
+                      <option value="" disabled>Select your country</option>
+                      {countryList.map((country) => (
+                        <option key={country.code} value={country.code}>
+                          {country.name}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                />
+              </FieldContent>
+              <FieldError>{errors.country?.message}</FieldError>
             </Field>
 
             {/* Password with Eye Icon */}

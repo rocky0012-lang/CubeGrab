@@ -1,4 +1,4 @@
-{/* import React from "react";
+import React from "react";
 import { sendEmail } from "@/lib/email";
 import WelcomeUserEmail from "@/emails/welcome-user";
 
@@ -23,4 +23,3 @@ export async function GET() {
         }, { status: 500 });
     }
 }
-    */}
