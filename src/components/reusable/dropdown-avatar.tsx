@@ -23,6 +23,7 @@ import {
     AlertDialogHeader, 
     AlertDialogTitle 
 } from "../ui/alert-dialog";
+import { toast } from "sonner";
 
 
 export const DropdownAvatar = () => {
@@ -40,15 +41,27 @@ export const DropdownAvatar = () => {
     }, []);
 
     const handleLogout = async () => {
-      const { error } = await supabase.auth.signOut();
+        try {
+            const { error } = await supabase.auth.signOut();
 
-      if (error) {
-        console.error("Logout failed:", error);
-        return;
-      }
+            if (error) {
+                console.error(error);
+                toast.error("Failed to sign out. Please try again.");
+                return false;
+            }
 
-      router.replace("/signin");
-      router.refresh();
+            toast.success("Successfully signed out.");
+
+            router.replace("/signInPath");
+            router.refresh();
+
+            return true;
+        } catch (err) {
+            console.error(err);
+            toast.error("An unexpected error occurred. Please try again.");
+
+            return false;
+        }
     };
 
     
@@ -147,7 +160,15 @@ export const DropdownAvatar = () => {
                     </AlertDialogCancel>
 
                     <AlertDialogAction
-                        onClick={handleLogout}
+                        onClick={async (e) => {
+                            e.preventDefault();
+
+                            const success = await handleLogout();
+
+                            if (success) {
+                                setOpenLogoutDialog(false);
+                            }
+                        }}
                         className="bg-red-600 text-white hover:bg-red-700"
                     >
                         Sign out

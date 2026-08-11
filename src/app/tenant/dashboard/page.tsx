@@ -1,20 +1,18 @@
-import { DropdownAccountCardSM } from "@/components/reusable/account-card"
-import LogoutDialog from "@/components/reusable/logout-dialog";
+import TenantSidebar from "@/components/reusable/tenant-sidebar";
+import TenantNavbar from "@/components/reusable/tenant-navbar";
 
 const TenantDashboard = () => {
   return (
-    <div className="flex flex-col items-center justify-between">
-      
+    <div className="flex ">
+      {/* Sidebar component */}
+      <TenantSidebar />
+      <main className="flex flex-col w-full h-full py-7 px-9">
+        {/* Navbar component */}
+        <TenantNavbar />
+        
         <h1>Tenant Dashboard</h1>
         <p>Hi, welcome to your dashboard!</p>
-      
-      
-        <LogoutDialog
-          redirectTo="/sign-in" 
-        />
-        <DropdownAccountCardSM 
-          redirectTo="/sign-in"
-        />
+      </main>
       
     </div>
   )

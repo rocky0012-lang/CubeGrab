@@ -76,7 +76,7 @@ export default function EmailLayout({
                                 Contact us at{" "}
                             <a
                                 href="mailto:support@cubegrab.com"
-                                style={{color: "D4AF37"}}
+                                style={{color: "`D4AF37`"}}
                             >
                                 support@cubegrab.com
                             </a>
