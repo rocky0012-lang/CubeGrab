@@ -1,10 +1,13 @@
+import { ProfileProvider } from '@/providers/profile-provider'
 import { ReactNode } from 'react'
 
 const Authlayout = ({children} : {children: ReactNode}) => {
   return (
-    <div>
-      {children}
-    </div>
+    <ProfileProvider>
+      <main>
+        {children}
+      </main>
+    </ProfileProvider>
   )
 }
 

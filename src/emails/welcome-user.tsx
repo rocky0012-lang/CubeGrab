@@ -1,4 +1,4 @@
-import { Button, Text } from "@react-email/components"
+import { Button, Text, Tailwind } from "@react-email/components"
 import EmailLayout from "./components/EmailLayout"
 
 interface WelcomeUserEmailProps {
@@ -9,6 +9,7 @@ export default function WelcomeUserEmail({
     firstName,
 }: WelcomeUserEmailProps) {
     return (
+        <Tailwind>
         <EmailLayout
             preview="Welcome to CubeGrab!"
             title={`Welcome, ${firstName}!`}
@@ -37,5 +38,6 @@ export default function WelcomeUserEmail({
                     Open CubeGrab
                 </Button>
             </EmailLayout>
+        </Tailwind>
     );
 }

@@ -59,6 +59,7 @@ const LiveSelfieCard = ({ onImageSelected }: LiveSelfieCardProps) => {
             video.srcObject = stream;
             try {
                 await video.play();
+                setCameraError(null);
                 setCameraActive(true);
             } catch (err) {
                 console.error("Error playing video:", err);

@@ -60,18 +60,20 @@ const ForgotPasswordForm = () => {
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center gap-4">
         <form onSubmit={handleSubmit(onSubmit)} className="flex w-full max-w-md flex-col gap-4 items-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 border border-[var(--color-accent-gold)] rounded-xl mb-6">
-              <KeyRound className="w-6 h-6 text-[var(--color-accent-gold)]" />
+            <div className="inline-flex items-center justify-center lg:w-12 lg:h-12 h-8 w-8  border border-[var(--color-accent-gold)] rounded-xl mb-2">
+              <KeyRound className="lg:w-6 lg:h-6 h-5 w-5 text-[var(--color-accent-gold)]" />
             </div> 
-            <h1 className="flex text-3xl font-medium items-center">Forgot Password?</h1> 
-            <p className="text-md text-center text-secondary">Enter your email address and we will send you a link to reset your password.</p> 
+            <div className="flex flex-col items-center gap-1 w-full mb-2">
+              <h1 className="flex lg:text-3xl text-lg font-medium items-center">Forgot Password?</h1> 
+              <p className="lg:text-md text-xs text-center text-secondary">Enter your email address and we will send you a link to reset your password.</p> 
+            </div>
             <div className="flex flex-col gap-1 w-full"> 
-                <label htmlFor="email" className="flex pb-1">Email</label> 
+                <label htmlFor="email" className="flex lg:text-lg text-sm pb-1">Email</label> 
                 <Input 
                     id="email"
                     type="email" 
                     placeholder="Enter your email address" 
-                    className="w-full"
+                    className="w-full text-sm h-10"
                     aria-invalid={Boolean(errors.email)}
                     aria-describedby={errors.email ? "email-error" : undefined}
                     {...register("email")} 
