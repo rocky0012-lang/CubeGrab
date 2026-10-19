@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/field"
 import { useRouter } from "next/navigation"
 import { CubeGrabLogo } from "../reusable/cubegrab-logo"
-import SocialAuthButtons from "../ui/social-auth-button"
+import SocialAuthButtons from "@/components/auth/social-button"
 import Separator from "@/components/reusable/separator"
 import Link from "next/link"
 import { BackButton } from "@/components/reusable/back-button"
@@ -148,7 +148,7 @@ export function OwnerSigninForm() {
             </Link>
           </div>
           <Separator />
-          <SocialAuthButtons />
+          <SocialAuthButtons targetRole="owner" />
           </CardContent>
         </Card>
         </>

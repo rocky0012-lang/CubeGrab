@@ -270,3 +270,46 @@
 .animate-scan-line {
   animation: scan-line 3s ease-in-out infinite;
 }
+
+.recent-stays-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-accent-gold) transparent;
+}
+
+.recent-stays-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.recent-stays-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.recent-stays-scroll::-webkit-scrollbar-thumb {
+  background-color: var(--color-accent-gold);
+  border-radius: 9999px;
+}
+
+.recent-stays-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-accent-gold-dark);
+}
+
+/* Page scrollbar stays hidden */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* Specific scrollable UI areas */
+.slim-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.slim-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.slim-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}

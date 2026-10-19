@@ -246,9 +246,9 @@ export const InputTags = ({
                 isInvalid={isInvalid}
                 className={({ isFocusWithin, isDisabled, isInvalid }) =>
                     cx(
-                        "group/input relative flex w-full items-center rounded-lg bg-primary shadow-xs ring-1 ring-primary outline-hidden transition duration-100 ease-linear ring-inset",
+                        "group/input relative flex w-full items-center rounded-lg shadow-xs ring-1 ring-primary outline-hidden transition duration-100 ease-linear ring-inset",
                         isDisabled && "cursor-not-allowed opacity-50",
-                        isFocusWithin && !isDisabled && "ring-2 ring-brand",
+                        isFocusWithin && !isDisabled && "ring-2 ring-[var(--color-accent-gold-dark)]",
                         isInvalid && !isFocusWithin && "ring-error_subtle",
                         isInvalid && isFocusWithin && "ring-2 ring-error",
                         sizes[size].root,
@@ -285,7 +285,7 @@ export const InputTags = ({
                                     placeholder={isEmpty ? placeholder : undefined}
                                     onChange={(e) => setInputValue(e.target.value)}
                                     onKeyDown={handleInputKeyDown}
-                                    className="w-full flex-[1_0_0] appearance-none bg-transparent text-ellipsis text-primary caret-alpha-black/90 outline-hidden placeholder:text-placeholder focus:outline-hidden disabled:cursor-not-allowed"
+                                    className="w-full flex-[1_0_0] appearance-none bg-transparent text-ellipsis caret-alpha-black/90 outline-hidden placeholder:text-placeholder focus:outline-hidden disabled:cursor-not-allowed"
                                 />
                             </div>
                         </div>

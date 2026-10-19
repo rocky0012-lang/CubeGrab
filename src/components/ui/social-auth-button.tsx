@@ -52,7 +52,7 @@ const SocialAuthButtons = () => {
       }
 
     return (
-    <div className="flex flex-row justify-center gap-12">
+    <div className="flex flex-row lg:flex-col items-center justify-center gap-2">
       {providers.map((provider: providerType) => (
         <SocialButton
             key={provider.name} 

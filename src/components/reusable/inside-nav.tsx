@@ -11,7 +11,9 @@ const InsideNav = () => {
           width={78}
           priority
           />
-      <DropdownAccountCardSM />
+      <DropdownAccountCardSM 
+        redirectTo="/sign-in"
+      />
     </nav>
   )
 }

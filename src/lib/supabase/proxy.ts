@@ -73,7 +73,7 @@ export async function updateSession(request: NextRequest) {
     // Password Reset
     '/forgot-password',
     '/reset-password',
-    '/auth/auth-code-error',
+    '/auth-code-error',
   ])
   const isPublicRoute = 
     publicRoutes.has(pathname) || 

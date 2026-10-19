@@ -8,10 +8,11 @@ import { Button } from "@/components/base/buttons/button";
 import { Dropdown } from "@/components/base/dropdown/dropdown";
 import { cx } from "@/lib/utils/cx";
 import { AvatarLabelGroup } from "@/components/base/avatar/avatar-label-group";
-import { useProfile } from "@/hooks/use-profile";
 import { useTheme } from "next-themes";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import { useProfileContext } from "@/providers/profile-provider";
+
 
 import { 
     AlertDialog, 
@@ -27,11 +28,15 @@ import { toast } from "sonner";
 
 
 export const DropdownAvatar = () => {
-    const { profile, loading } = useProfile();
+    const { profile, loading } = useProfileContext();
+
+    const profileHref = profile?.user_role === "tenant" ? "/tenant/profile" : "/owner/profile";
+    const settingsHref = profile?.user_role === "tenant" ? "/tenant/settings" : "/owner/settings";
 
     const { resolvedTheme, setTheme } = useTheme();
     const [ mounted, setMounted ] = useState(false);
     const [ openLogoutDialog, setOpenLogoutDialog ] = useState(false);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
     const isDark = mounted && resolvedTheme === "dark";
     const router = useRouter();
     const supabase = createClient();
@@ -52,7 +57,7 @@ export const DropdownAvatar = () => {
 
             toast.success("Successfully signed out.");
 
-            router.replace("/signInPath");
+            router.replace("/signInpath");
             router.refresh();
 
             return true;
@@ -73,30 +78,34 @@ export const DropdownAvatar = () => {
             <AriaButton
                 className={({ isPressed, isFocusVisible }) =>
                     cx(
-                        "group relative inline-flex cursor-pointer rounded-full outline-offset-2 ring-[var(--color-accent-gold)]",
+                        "group relative inline-flex cursor-pointer rounded-full outline-offset-2 ring-(--color-accent-gold)]",
                         (isPressed || isFocusVisible) && "outline-2",
                     )
                 }
             >
-                <Avatar alt="Olivia Rhye" src="https://www.untitledui.com/images/avatars/olivia-rhye?fm=webp&q=80" size="sm" />
+                <Avatar 
+                    alt={profile?.full_name} 
+                    src={profile?.profile_photo_url ?? undefined}
+                    size="sm" 
+                />
             </AriaButton>
 
-            <Dropdown.Popover className="w-60">
+            <Dropdown.Popover className="w-45 text-sm lg:w-60 lg:size-auto">
                 <div className="flex gap-3 border-b border-secondary p-3">
                     <AvatarLabelGroup
                         size="md"
-                        src="https://www.untitledui.com/images/avatars/olivia-rhye?fm=webp&q=80"
+                        src={profile?.profile_photo_url ?? undefined}
                         status="online"
                         title={loading ? "Loading..." : profile?.full_name}
                         subtitle={loading ? "Loading..." : profile?.email}
                     />
                 </div>
                 <Dropdown.Menu>
-                    <Dropdown.Item icon={User01}>
-                        View profile
+                    <Dropdown.Item icon={User01} className="font-sm text-sm" href={loading ? "#" : profileHref}>
+                        {loading ? 'Loading profile...' : 'View profile'}
                     </Dropdown.Item>
-                    <Dropdown.Item icon={Settings01} href="/settings">
-                        Settings
+                    <Dropdown.Item icon={Settings01} href={loading ? "#" : settingsHref}>
+                        {loading ? 'Loading settings...' : 'Settings'}
                     </Dropdown.Item>
                     <Dropdown.Section selectionMode="single" selectedKeys={new Set([isDark ? "dark-mode" : "light-mode"])}>
                         {mounted && (
@@ -115,7 +124,7 @@ export const DropdownAvatar = () => {
                     <SubmenuTrigger>
                         <Dropdown.Item icon={HelpCircle}>Support</Dropdown.Item>
 
-                        <Dropdown.Popover placement="right top" offset={-6}>
+                        <Dropdown.Popover placement="right top" className="w-auto" offset={-6}>
                             <Dropdown.Menu>
                                 <Dropdown.Item>Help center</Dropdown.Item>
                                 <Dropdown.Item>Contact support</Dropdown.Item>
@@ -160,8 +169,10 @@ export const DropdownAvatar = () => {
                     </AlertDialogCancel>
 
                     <AlertDialogAction
+                        disabled={isLoggingOut}
                         onClick={async (e) => {
                             e.preventDefault();
+                            setIsLoggingOut(true);
 
                             const success = await handleLogout();
 

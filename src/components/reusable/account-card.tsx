@@ -7,9 +7,10 @@ import { Button as AriaButton, SubmenuTrigger } from "react-aria-components";
 import { Avatar } from "@/components/base/avatar/avatar";
 import { Dropdown } from "@/components/base/dropdown/dropdown";
 import { cx } from "@/lib/utils/cx";
-import { useProfile } from "@/hooks/use-profile";
 import { useTheme } from "next-themes";
 import { useLogout } from "@/components/reusable/logout-action";
+import { useProfileContext } from "@/providers/profile-provider";
+import { AvatarProfilePhoto } from "@/components/base/avatar/avatar-profile-photo";
 
 import {
   AlertDialog,
@@ -27,12 +28,16 @@ interface DropdownAccountCardSMProps {
 }
 
 export const DropdownAccountCardSM = ({ redirectTo }: DropdownAccountCardSMProps) => {
-    const { profile, loading } = useProfile();
+    const { profile, loading } = useProfileContext();
+
+    const profileHref = profile?.user_role === "tenant" ? "/tenant/profile" : "/owner/profile";
+    const settingsHref = profile?.user_role === "tenant" ? "/tenant/settings" : "/owner/settings";
+
     const logout = useLogout(redirectTo);
 
     const [selectedAccount, setSelectedAccount] = useState<Selection>(new Set(["olivia"]));
     const { resolvedTheme, setTheme } = useTheme();
-    const [ mounted, setMounted ] = useState(true);
+    const mounted = true;
     const isDark = mounted && resolvedTheme === "dark";
     const [openLogOutDialog, setOpenLogOutDialog] = useState(false);
 
@@ -43,14 +48,20 @@ export const DropdownAccountCardSM = ({ redirectTo }: DropdownAccountCardSMProps
                 <AriaButton
                     className={({ isPressed, isFocused }) =>
                         cx(
-                            "relative flex w-46 cursor-pointer items-center gap-2 rounded-lg p-1.5 text-left inset-ring-1 inset-ring-border-secondary outline-offset-2 ring-[var(--color-accent-gold)]",
+                            "relative flex w-46 cursor-pointer items-center gap-2 rounded-lg p-1.5 text-left inset-ring-1 inset-ring-border-secondary outline-offset-2 ring-(--color-accent-gold)]",
                             (isPressed || isFocused) && "outline-2",
                         )
                     }
                 >
-                    <Avatar border size="sm" src="https://www.untitledui.com/images/avatars/olivia-rhye?fm=webp&q=80" status="online" />
+                    <Avatar 
+                        border 
+                        size="sm" 
+                        alt={profile?.full_name ?? "Profile photo"}
+                        src={profile?.profile_photo_url ?? undefined} 
+                        status="online" 
+                    />
                 
-                    <p className="text-sm font-semibold ">{loading ? "Loading..." : profile?.full_name}</p>
+                    <p className="text-sm font-semibold ">{profile?.full_name ?? "Profile"}</p>
                 
                     <div className="absolute top-2 right-2 flex size-7 items-center justify-center rounded-md">
                         <ChevronDown className="size-4 shrink-0 stroke-[2.25px]" />
@@ -63,11 +74,17 @@ export const DropdownAccountCardSM = ({ redirectTo }: DropdownAccountCardSMProps
                         <p className="text-sm text-tertiary">{loading ? "" : profile?.email}</p>
                     </div>
                     <Dropdown.Menu>
-                        <Dropdown.Item icon={User01}>
-                            View profile
+                        <Dropdown.Item 
+                            icon={User01} 
+                            href={loading ? "#" : profileHref} 
+                        >
+                           {loading ? 'Loading profile...' : 'View profile'}
                         </Dropdown.Item>
-                        <Dropdown.Item icon={Settings01} href="/settings">
-                            Settings
+                        <Dropdown.Item 
+                           icon={Settings01} 
+                           href={loading ? "#" : settingsHref}
+                        >
+                           {loading ? 'Loading settings...' : 'Settings'}
                         </Dropdown.Item>
                         <Dropdown.Section selectionMode="single" selectedKeys={new Set([isDark ? "dark-mode" : "light-mode"])}>
                             {mounted && (<Dropdown.Item id="dark-mode" icon={Moon01} selectionIndicator="toggle" onAction={() => setTheme(isDark ? "light" : "dark")}>
@@ -94,7 +111,7 @@ export const DropdownAccountCardSM = ({ redirectTo }: DropdownAccountCardSMProps
                                 Switch Account
                             </Dropdown.SectionHeader>
                 
-                            <Dropdown.Item id="olivia" avatarUrl="https://www.untitledui.com/images/avatars/olivia-rhye?fm=webp&q=80" selectionIndicator="radio">
+                            <Dropdown.Item id="olivia" avatarUrl={profile?.profile_photo_url ?? undefined} alt={profile?.full_name ?? "Profile photo"} selectionIndicator="radio">
                                 {loading ? "Loading..." : profile?.full_name}
                             </Dropdown.Item>
                             <Dropdown.Item id="sienna" avatarUrl="https://www.untitledui.com/images/avatars/sienna-hewitt?fm=webp&q=80" selectionIndicator="radio">
@@ -132,7 +149,7 @@ export const DropdownAccountCardSM = ({ redirectTo }: DropdownAccountCardSMProps
                         <AlertDialogTitle>Sign out?</AlertDialogTitle>
                         <AlertDialogDescription>
                             Are you sure you want to sign out of your CubeGrab account?
-                            You'll need to sign in to continue.
+                            You&apos;ll need to sign in to continue.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

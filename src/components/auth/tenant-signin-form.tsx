@@ -16,10 +16,11 @@ import {
 } from "@/components/ui/field"
 import { useRouter } from "next/navigation"
 import { CubeGrabLogo } from "@/components/reusable/cubegrab-logo"
-import SocialAuthButtons from "@/components/ui/social-auth-button"
+import SocialAuthButtons from "@/components/auth/social-button"
 import Separator from "@/components/reusable/separator"
 import Link from "next/link"
 import { BackButton } from "../reusable/back-button"
+import Image from "next/image"
 
 const signinSchema = z.object({
   email: z.string().email("Please input a valid email address."),
@@ -97,17 +98,28 @@ export function TenantSigninForm() {
             <div className="w-full max-w-xl">
               <BackButton href="/" />
             </div>
-          <div className="text-center mb-8">
+          <div className="hidden lg:flex text-center mb-8">
             <CubeGrabLogo 
               width={208}
               height={208}
             />
           </div>
+          <div className="lg:hidden flex text-center mb-4 mt-3">
+            <Image
+              src="/images/CubeGrab-Onboard-logo.png"
+              alt="Tenant Sign In Illustration"
+              className="mx-auto" 
+              width={208}
+              height={208}
+            />
+          </div>
           <div className="w-full max-w-xl mx-auto mb-6 px-4">
-          <p className="text-zinc-600 dark:text-zinc-400 mb-4 text-2xl max-w-xl mx-auto">
+          <p className="text-zinc-600 dark:text-zinc-100 mb-1 text-lg lg:text-2xl max-w-xl mx-auto">
             Tenant Sign In
           </p>
-          <h3>Log in to find your perfect space.</h3>
+          <h3 className="text-md dark:text-zinc-400 lg:text-md">
+            Log in to find your perfect space.
+          </h3>
           </div>
         <Card className="w-full max-w-xl mx-auto bg-[var(--color-bg-secondary-base)]/10 dark:bg-[var(--color-bg-primary-base)]/5 backdrop-blur-md border border-white/20 dark:border-white/10 shadow-xl">
           <CardContent>
@@ -136,7 +148,7 @@ export function TenantSigninForm() {
               </Button>
           </form>
           <div className="flex items-center justify-between mt-2.5">
-            <p className="text-sm text-muted-foreground">
+            <p className="lg:text-sm text-xs text-muted-foreground">
               Don&apos;t have an account?{" "}
               <Link
                 href="/sign-up"
@@ -148,13 +160,13 @@ export function TenantSigninForm() {
                       
             <Link
               href="/forgot-password?returnTo=/sign-in"
-              className="text-sm text-[var(--color-accent-gold)] hover:underline"
+              className="text-xs lg:text-sm text-[var(--color-accent-gold)] hover:underline"
             >
               Forgot your password?
             </Link>
           </div>
           <Separator />
-          <SocialAuthButtons />
+          <SocialAuthButtons targetRole="tenant" />
           </CardContent>
         </Card>
         </>

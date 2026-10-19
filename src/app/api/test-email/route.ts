@@ -1,3 +1,4 @@
+{/*
 import React from "react";
 import { sendEmail } from "@/lib/email";
 import WelcomeUserEmail from "@/emails/welcome-user";
@@ -5,7 +6,7 @@ import WelcomeUserEmail from "@/emails/welcome-user";
 export async function GET() {
     try {
         await sendEmail({
-            to: "francisgathua16@gmail.com",
+            to: "francisgathua72@gmail.com",
             subject: "Testing CubeGrab Emails",
             react: React.createElement(WelcomeUserEmail, { firstName: "Francis" }),
         });
@@ -23,3 +24,5 @@ export async function GET() {
         }, { status: 500 });
     }
 }
+
+*/}
