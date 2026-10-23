@@ -48,7 +48,7 @@ export const DropdownAccountCardSM = ({ redirectTo }: DropdownAccountCardSMProps
                 <AriaButton
                     className={({ isPressed, isFocused }) =>
                         cx(
-                            "relative flex w-46 cursor-pointer items-center gap-2 rounded-lg p-1.5 text-left inset-ring-1 inset-ring-border-secondary outline-offset-2 ring-(--color-accent-gold)]",
+                            "relative flex w-46 cursor-pointer items-center gap-2 rounded-lg p-1.5 text-left inset-ring-1 inset-ring-border-secondary outline-offset-2 ring-(--color-accent-gold)",
                             (isPressed || isFocused) && "outline-2",
                         )
                     }

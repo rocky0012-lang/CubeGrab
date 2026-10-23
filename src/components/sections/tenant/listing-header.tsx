@@ -12,9 +12,10 @@ interface ListingHeaderProps {
     pricePeriod: string;
     rating: number;
     reviewCount: number;
+    currency: string;
 }
 
-const ListingHeader = ({ id, title, location, price, pricePeriod, rating, reviewCount }: ListingHeaderProps) => {
+const ListingHeader = ({ id, title, location, price, pricePeriod, rating, reviewCount, currency = "USD" /* currency = "KES" */ }: ListingHeaderProps) => {
   return (
     <div className="mt-4 w-3/4">
       <div className="flex w-full items-start justify-between gap-6 px-2">
@@ -37,7 +38,7 @@ const ListingHeader = ({ id, title, location, price, pricePeriod, rating, review
         {/* RIGHT — Price & Rating */}
         <div className="flex shrink-0 flex-col items-end pr-6">
           <span className="text-2xl font-semibold text-gray-900 dark:text-[var(--color-text-accent)]">
-            {price.toLocaleString()}
+            {new Intl.NumberFormat("en-KE", { style: "currency", currency, maximumFractionDigits: 0 }).format(price)}
 
             <span className="ml-1 text-sm font-normal text-gray-500 dark:text-gray-400">
               / {pricePeriod}

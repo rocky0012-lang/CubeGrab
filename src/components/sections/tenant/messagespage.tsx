@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-
 import {
   ArrowLeft,
   MoreVertical,
@@ -502,6 +501,7 @@ return (
               <button
                 type="button"
                 onClick={handleBackToConversations}
+                aria-label="Back"
                 className="rounded-md p-1 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 lg:hidden">
                 <ArrowLeft className="size-5" />
               </button>
@@ -683,6 +683,7 @@ return (
               <Button
                 type="button"
                 size="icon"
+                aria-label="Send message"
                 className="size-10 shrink-0 rounded-full bg-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold-dark)]"
               >
                 <SendHorizontal className="size-6" />
@@ -695,9 +696,9 @@ return (
           <div className="flex h-full w-full items-center justify-center">
             <Empty className="flex items-center justify-center">
               <EmptyHeader>
-                <EmptyTitle>No Conversations</EmptyTitle>
+                <EmptyTitle>Select a Conversation</EmptyTitle>
                 <EmptyDescription className="max-w-xs text-pretty">
-                  You&apos;re all caught up. New notifications will appear here.
+                  Choose a conversation from the sidebar to start messaging.
                 </EmptyDescription>
               </EmptyHeader>
               <EmptyContent className="flex flex-row items-center justify-center gap-2">

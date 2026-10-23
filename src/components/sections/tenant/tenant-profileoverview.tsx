@@ -105,36 +105,38 @@ const TenantProfileOverview = () => {
                   <h3 className="lg:text-md text-sm text-gray-600 dark:text-gray-400">
                     Tenant
                   </h3>
-                  <Badge
-                    className="
-                      lg:h-7
-                      h-5
-                      gap-1
-                      bg-white/90
-                      px-2
-                      lg:text-md
-                      lg:font-medium
-                      text-xs
-                      text-emerald-600
-                      dark:ring-0
-                      dark:border-0
-                      backdrop-blur-sm
-                      dark:bg-transparent
-                      lg:ring-emerald-600
-                      lg:dark:text-emerald-600
-                    "
-                  >
-                    <BadgeCheck
+                  {isIdentityVerified && (
+                    <Badge
                       className="
-                        lg:h-5 lg:w-5
-                        h-3.5 w-3.5
-                        shrink-0
+                        lg:h-7
+                        h-5
+                        gap-1
+                        bg-white/90
+                        px-2
+                        lg:text-md
+                        lg:font-medium
+                        text-xs
                         text-emerald-600
-                        dark:text-emerald-600
+                        dark:ring-0
+                        dark:border-0
+                        backdrop-blur-sm
+                        dark:bg-transparent
+                        lg:ring-emerald-600
+                        lg:dark:text-emerald-600
                       "
-                    />
-                    Verified
-                  </Badge>
+                    >
+                      <BadgeCheck
+                        className="
+                          lg:h-5 lg:w-5
+                          h-3.5 w-3.5
+                          shrink-0
+                          text-emerald-600
+                          dark:text-emerald-600
+                        "
+                      />
+                      Verified
+                    </Badge>
+                  )}
                 </div>
 
                 <div className="flex flex-col items-start mt-2 lg:gap-3 gap-1.5 text-gray-500 dark:text-gray-400 w-full min-w-0">

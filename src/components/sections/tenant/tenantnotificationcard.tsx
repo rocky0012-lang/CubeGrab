@@ -65,7 +65,7 @@ export default function TenantNotificationCard({
       }`}
     >
       <div className={`p-2.5 rounded-full flex-shrink-0 ${styles.bg}`}>
-        <IconComponent className={`lg:w-5 lg:h-5 sm:w-3 sm:h-3 ${styles.icon}`} />
+        <IconComponent className={`size-4 lg:size-5 ${styles.icon}`} />
       </div>
 
       {/* 📝 Center Column: Title, Content, and Unread Status indicator */}

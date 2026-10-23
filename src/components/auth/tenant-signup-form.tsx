@@ -12,6 +12,7 @@ import Link from "next/link"
 import { validateAccount } from "@/lib/api/account-validation"
 import { BackButton } from "../reusable/back-button"
 import { getData } from 'country-list'
+import { getPhoneCountry } from "@/lib/phone-country";
 
 // Supabase client
 import { createClient } from "@/lib/supabase/client"
@@ -118,22 +119,13 @@ export function TenantSignupForm() {
   })
 
   const handlePhoneChange = (value: string | undefined) => {
-    setValue('phoneNumber', value ?? "", { shouldValidate: true })
-    if (value) {
-      const parsed = parsePhoneNumber(value)
-    
-    if (parsed) {
-        const detectedCountryIso = parsed.country; // e.g. "KE"
-        const countryObject = countryList.find(c => c.code === detectedCountryIso)
-        setValue('country.code', detectedCountryIso ?? "", { shouldValidate: true })
-        setValue('country.name', countryObject?.name ?? "Unknown", { shouldValidate: true })
-      }
-    } else {
-      // Clear out fields if phone input is emptied out completely
-      setValue('country.code', "", { shouldValidate: true })
-      setValue('country.name', "", { shouldValidate: true })
-    }
-  }
+    setValue('phoneNumber', value ?? "", { shouldValidate: true, });
+
+    const country = getPhoneCountry(value, countryList);
+
+    setValue('country.code', country.code, { shouldValidate: true, });
+    setValue('country.name', country.name, { shouldValidate: true, });
+  };
 
   // Watch values for custom primitives (Checkbox)
   const termsValue = watch("terms")
@@ -306,6 +298,11 @@ export function TenantSignupForm() {
                 {errors.phoneNumber && (
                   <FieldError>
                     {errors.phoneNumber.message}
+                  </FieldError>
+                )}
+                {errors.country?.code && (
+                  <FieldError>
+                    Unable to determine country from phone number. Please ensure the number is valid and includes the country code.
                   </FieldError>
                 )}
             </Field>

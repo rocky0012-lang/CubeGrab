@@ -12,6 +12,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { validateAccount } from "@/lib/api/account-validation"
 import { BackButton } from "@/components/reusable/back-button"
+import { getPhoneCountry } from "@/lib/phone-country"
 
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
@@ -105,22 +106,14 @@ export function OwnerSignupForm() {
   })
 
   const handlePhoneChange = (value: string | undefined) => {
-      setValue('phoneNumber', value ?? "", { shouldValidate: true })
-      if (value) {
-        const parsed = parsePhoneNumber(value)
+      setValue('phoneNumber', value ?? "", { shouldValidate: true, });
+
+      const country = getPhoneCountry(value, countryList);
       
-      if (parsed) {
-          const detectedCountryIso = parsed.country; // e.g. "KE"
-          const countryObject = countryList.find(c => c.code === detectedCountryIso)
-          setValue('country.code', detectedCountryIso ?? "", { shouldValidate: true })
-          setValue('country.name', countryObject?.name ?? "Unknown", { shouldValidate: true })
-        }
-      } else {
         // Clear out fields if phone input is emptied out completely
-        setValue('country.code', "", { shouldValidate: true })
-        setValue('country.name', "", { shouldValidate: true })
-      }
-    }
+        setValue('country.code', "", { shouldValidate: true, });
+        setValue('country.name', "", { shouldValidate: true, });
+      };
 
   const termsValue = watch("terms")
 

@@ -2,12 +2,6 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import {
-  Field,
-  FieldContent,
-  FieldLabel,
-  FieldError,
-} from "@/components/ui/field"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@/components/ui/input"
@@ -20,10 +14,18 @@ import { useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { useForm, Controller } from "react-hook-form";
 import { useProfileContext } from "@/providers/profile-provider";
+import { useProfileStore } from "@/hooks/use-profile";
+import { getPhoneCountry } from "@/lib/phone-country";
 import { 
   Mail, 
   UserRound, 
 } from "lucide-react"
+import {
+  Field,
+  FieldContent,
+  FieldLabel,
+  FieldError,
+} from "@/components/ui/field"
 
 const onboardingSignupSchema = z.object({
   full_name: z.string().min(1, "Full name is required."),
@@ -69,27 +71,13 @@ const OnboardingPage = () => {
       })
 
       const handlePhoneChange = (value: string | undefined) => {
-        setValue('phoneNumber', value ?? "", { shouldValidate: true })
+        setValue('phoneNumber', value ?? "", { shouldValidate: true, });
 
-        if (value) {
-          const parsed = parsePhoneNumber(value)
-        
-        if (parsed) {
-            // B. Automatically look up the country name from your countryList dataset array 
-            // to map it cleanly alongside the 2-letter ISO country text code target string
-            const detectedCountryIso = parsed.country; // e.g. "KE"
-            const countryObject = countryList.find(c => c.code === detectedCountryIso);
-
-            // C. Update react-hook-form values so data is perfectly organized for database insertion
-            setValue('country.code', detectedCountryIso ?? "", { shouldValidate: true })
-            setValue('country.name', countryObject?.name ?? "Unknown", { shouldValidate: true })
-          }
-        } else {
+        const country = getPhoneCountry(value, countryList);
           // Clear out fields if phone input is emptied out completely
-          setValue('country.code', "", { shouldValidate: true })
-          setValue('country.name', "", { shouldValidate: true })
-        }
-      }
+          setValue('country.code', "", { shouldValidate: true, });
+          setValue('country.name', "", { shouldValidate: true, });
+        };
 
       useEffect(() => {
       if (!profile) return
@@ -132,13 +120,17 @@ const OnboardingPage = () => {
                 // 🚨 Display the error message to the user
                 if (error.code === "23505" || error.message?.includes('users_phone_number_key')) {
                   setFormError("This phone number is already registered to another account. Please use a different phone number or check your details.");
-                }; 
-                return;
+              } else {
+                setFormError("Unable to update your profile. Please try again.");
+              }
+              return;
             }
 
             if (updatedUser.user_role === "tenant") {
+              useProfileStore.getState().fetchProfile(true);
                 router.replace("/tenant/dashboard");
             } else if (updatedUser.user_role === "owner") {
+              useProfileStore.getState().fetchProfile(true);
                 router.replace("/owner/dashboard");
             } else {
               setFormError("Account configuration error: Invalid role detected.");
