@@ -100,8 +100,8 @@ const MobileMyBookings = () => {
 
         {/* Active Bookings */}
         <div className="mt-4 flex w-full flex-col gap-4">
-            <ActiveBookings activeBooking={true} />
-            {/* <ActiveBookings activeBooking={null} /> */}
+            <ActiveBookings activeBooking={null} />
+            {/* <ActiveBookings activeBooking={true} /> */}
         </div>
 
         <Separator
@@ -111,8 +111,8 @@ const MobileMyBookings = () => {
 
         {/* Past Bookings */}
         <div className="mt-4 flex w-full flex-col gap-4">
-            <PastBookings pastBookings={PastBookingsData} />
-            {/* <PastBookings pastBookings={[]} /> */}
+            <PastBookings pastBookings={[]} />
+            {/* <PastBookings pastBookings={PastBookingsData} /> */}
         </div>
         
       </div>

@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
+import Image from "next/image"
 import { 
     MapPin,
     BedDouble,
@@ -43,10 +44,12 @@ export default function ListingCard({ id, imageUrl, title, location, price, Pric
           {/* Image Overlay */}
           <div className="absolute inset-0 z-10 bg-black/15" />
 
-          <img
+          <Image
             src={imageUrl}
             alt={title}
-            className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+            fill
+            sizes="(max-width: 640px) 85vw, (max-width: 1024px) 50vw, 20vw"
+            className="object-cover transition-transform duration-300 hover:scale-105"
           />
 
           {/* Verified Badge */}
@@ -100,9 +103,11 @@ export default function ListingCard({ id, imageUrl, title, location, price, Pric
           <div className="flex flex-col items-start">
             <span className="lg:text-lg text-md font-semibold text-gray-900 dark:text-[var(--color-text-accent)]">
               {price}
-              <span className="ml-1 lg:text-sm text-xs font-normal text-gray-500 dark:text-gray-400">
-                / {PricePeriod}
-              </span>
+              {PricePeriod && (
+                <span className="ml-1 lg:text-sm text-xs font-normal text-gray-500 dark:text-gray-400">
+                  / {PricePeriod}
+                </span>
+              )}
             </span>
 
             {/* Beds */}

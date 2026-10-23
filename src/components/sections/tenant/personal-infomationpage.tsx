@@ -288,7 +288,7 @@ export default function PersonalInformationPage() {
       };
 
       // The database URL has been cleared, even if the R2 deletion failed.
-      if (result.success && result.profilePhotoRemoved) {
+      if (result.profilePhotoRemoved) {
         setUploadedPhotoUrl(null);
         setSelectedPhoto(null);
         setUploadProgress(null);

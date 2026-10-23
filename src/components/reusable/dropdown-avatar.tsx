@@ -26,8 +26,12 @@ import {
 } from "../ui/alert-dialog";
 import { toast } from "sonner";
 
+interface DropdownAvatarProps {
+    signInPath?: string;
+}
 
-export const DropdownAvatar = () => {
+
+export const DropdownAvatar = ({ signInPath = "/sign-in" }: DropdownAvatarProps) => {
     const { profile, loading } = useProfileContext();
 
     const profileHref = profile?.user_role === "tenant" ? "/tenant/profile" : "/owner/profile";
@@ -57,7 +61,7 @@ export const DropdownAvatar = () => {
 
             toast.success("Successfully signed out.");
 
-            router.replace("/signInpath");
+            router.replace(signInPath);
             router.refresh();
 
             return true;
@@ -78,7 +82,7 @@ export const DropdownAvatar = () => {
             <AriaButton
                 className={({ isPressed, isFocusVisible }) =>
                     cx(
-                        "group relative inline-flex cursor-pointer rounded-full outline-offset-2 ring-(--color-accent-gold)]",
+                        "group relative inline-flex cursor-pointer rounded-full outline-offset-2 ring-(--color-accent-gold)",
                         (isPressed || isFocusVisible) && "outline-2",
                     )
                 }
@@ -176,6 +180,7 @@ export const DropdownAvatar = () => {
 
                             const success = await handleLogout();
 
+                            setIsLoggingOut(false);
                             if (success) {
                                 setOpenLogoutDialog(false);
                             }

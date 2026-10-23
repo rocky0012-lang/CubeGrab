@@ -46,20 +46,14 @@ export default function TenantSidebarNavItem({
   return (
     <div
       className="group relative w-full"
-      onMouseEnter={() => {
-        if (!isOpen && linkRef.current) {
-          const rect = linkRef.current.getBoundingClientRect();
-        
-          setTooltipPosition({
-            top: rect.top + rect.height / 2,
-            left: rect.right + 12,
-          });
-        }
-      }}
+      onMouseEnter={handleMouseEnter}
+      onFocus={handleMouseEnter}
     >
       <Link
         ref={linkRef}
         href={to}
+        aria-label={isOpen ? undefined : tooltip ?? label}
+        aria-current={isActive ? "page" : undefined}
         className={`
           flex w-full items-center rounded-md
           px-3 py-2.5 transition-all duration-200
@@ -109,6 +103,7 @@ export default function TenantSidebarNavItem({
             opacity-0 invisible
             transition-opacity duration-150
             group-hover:visible group-hover:opacity-100
+            group-focus-within:visible group-focus-within:opacity-100
             dark:border-slate-700
             dark:bg-slate-900
             dark:text-white

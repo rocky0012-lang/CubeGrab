@@ -18,7 +18,7 @@ import { BadgeCheck, CircleCheckBig, MessageCircle, PhoneCall, ShieldCheck } fro
 import { Button } from "@/components/ui/button"
 
 interface ListingamenitiesProps {
-  propertyName: string[];
+  propertyName: string;
   amenities: string[];
 }
 
@@ -28,9 +28,9 @@ const ListingDetails = ({ propertyName, amenities }: ListingamenitiesProps) => {
         <div className="flex w-full gap-2 overflow-hidden rounded-xl">
             <div className="relative w-3/4 overflow-hidden rounded-xl">
                 <div className="flex flex-wrap gap-2">
-                    {amenities.map((amenity, index) => (
+                    {amenities.map((amenity) => (
                         <Badge 
-                            key={index}
+                            key={amenity}
                             className="
                             mt-2 flex h-8 flex-row gap-2
                             bg-blue-100 text-sm text-slate-900
@@ -42,11 +42,7 @@ const ListingDetails = ({ propertyName, amenities }: ListingamenitiesProps) => {
                             dark:hover:text-white
                             "
                         >
-                            <span
-                                key={index}
-                            >
-                                {amenity}
-                            </span>
+                            <span>{amenity}</span>
                         </Badge>
                     ))}
                 </div>
@@ -57,8 +53,8 @@ const ListingDetails = ({ propertyName, amenities }: ListingamenitiesProps) => {
                       <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
                         About this property
                       </h1>
-                      <h2 className="text-md text-slate-700 dark:text-slate-300">
-                        {/* Property Name */}
+                      <h2 className="text-xl font-bold text-slate-700 dark:text-[var(--color-accent-gold)]">
+                        {propertyName}
                       </h2>
                       <p className="text-md text-slate-700 dark:text-slate-300">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. 

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useLogout } from "@/components/reusable/logout-action";
+import { useProfileContext } from "@/providers/profile-provider";
 import {
     User,
     Mail,
@@ -52,7 +53,6 @@ const profileMenuItems: ProfileMenuItem[] = [
         title: "Identity Verification",
         href: "/tenant/profile/phone",
         icon: Phone,
-        badge: "Verified",
         badgeVariant: "verified",
     },
     {
@@ -89,12 +89,47 @@ interface ProfileMenuProps {
 export default function ProfileMenu({ redirectTo }: ProfileMenuProps) {
     const logout = useLogout(redirectTo);
     const [openLogOutDialog, setOpenLogOutDialog] = useState(false);
+
+    const { profile } = useProfileContext();
+
+    const verificationStatus = (
+        profile as (typeof profile & { verification_status?: string }) | null
+    )?.verification_status;
+    
+    const normalizedVerificationStatus = verificationStatus?.toLowerCase() ?? "not_started";
+
+    const isIdentityVerified = normalizedVerificationStatus === "verified";
+
+    const identityBadge = {
+        text: isIdentityVerified 
+            ? "Verified"
+            : normalizedVerificationStatus === "pending" ||
+                normalizedVerificationStatus === "in_review"
+            ? "Pending"
+            : normalizedVerificationStatus === "failed"
+                ? "Failed"
+                : normalizedVerificationStatus === "expired"
+                ? "Expired"
+                : "Not verified",
+
+        variant: isIdentityVerified ? "verified" : "warning",
+    } as const;
+
     return (
         <div className="flex w-full flex-col">
             {/* Menu items */}
             <div className="flex flex-col">
                 {profileMenuItems.map((item) => {
                     const Icon = item.icon;
+                    const isIdentityItem = item.title === "Identity Verification";
+
+                    const badgeText = isIdentityItem 
+                        ? identityBadge.text
+                        : item.badge;
+
+                    const badgeVariant = isIdentityItem
+                        ? identityBadge.variant
+                        : item.badgeVariant;
 
                     return (
                         <Link
@@ -111,33 +146,29 @@ export default function ProfileMenu({ redirectTo }: ProfileMenuProps) {
 
                                 {/* Title + optional badge */}
                                 <div
-                                    className={
-                                        item.badge
-                                            ? "flex flex-col gap-1"
-                                            : "flex items-center"
-                                    }
+                                  className={
+                                    badgeText
+                                      ? "flex flex-col items-start gap-1"
+                                      : "flex items-center"
+                                  }
                                 >
-                                    <span className="text-sm font-medium text-slate-900 dark:text-white">
-                                        {item.title}
-                                    </span>
-
-                                    {item.badge && (
-                                        <Badge
-                                            className={`w-fit gap-1 text-xs ${
-                                                badgeStyles[
-                                                    item.badgeVariant ??
-                                                        "default"
-                                                ]
-                                            }`}
-                                        >
-                                            {item.badgeVariant ===
-                                                "verified" && (
-                                                <CheckCircle className="size-3" />
-                                            )}
-
-                                            {item.badge}
-                                        </Badge>
-                                    )}
+                                  <span className="text-sm font-medium text-slate-900 dark:text-white">
+                                    {item.title}
+                                  </span>
+                              
+                                  {badgeText && (
+                                    <Badge
+                                      className={`w-fit gap-1 text-xs ${
+                                        badgeStyles[badgeVariant ?? "default"]
+                                      }`}
+                                    >
+                                      {badgeVariant === "verified" && (
+                                        <CheckCircle className="size-3" />
+                                      )}
+                                
+                                      {badgeText}
+                                    </Badge>
+                                  )}
                                 </div>
                             </div>
 

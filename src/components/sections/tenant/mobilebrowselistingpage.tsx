@@ -1,28 +1,18 @@
 'use client'
 
 import React, { useState } from 'react'
-import { useRef } from "react";
 import { 
   Search ,
   MapPin,
-  ListFilterPlus,
-  ArrowUpDown,
-  BadgeCheck,
-  MoveRight,
 } from 'lucide-react'
 import {
   Card,
-  CardAction,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card"
 import { ChevronDown } from "@untitledui/icons";
 import { Button } from "@/components/base/buttons/button";
 import { Dropdown } from "@/components/base/dropdown/dropdown";
-import { Badge } from "@/components/ui/badge"
 import ListingCard from './listing-card';
+
 
 export default function MobileBrowseListingPage() {
   
@@ -42,7 +32,7 @@ export default function MobileBrowseListingPage() {
         "Hotel",
         "Resort",
       ];
-      const [selectedFilters, setSelectedFilters] = useState<string[]>(["Newly Listed"]);
+      const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
       const priceOptions: string[] = [
         "0 - 3,000",
@@ -53,7 +43,7 @@ export default function MobileBrowseListingPage() {
         "40,001 - 100,000",
         "100,000+"
       ];
-      const [selectedPrice, setSelectedPrice] = useState<string>("House");
+      const [selectedPrice, setSelectedPrice] = useState<string | null>("null");
     
       // 1. Define your sorting options array configuration
       const sortOptions: string[] = [
@@ -93,7 +83,7 @@ export default function MobileBrowseListingPage() {
                   {/* 2. Form Input Field: Left padding (pl-10) pushes placeholder text to clear the icon */}
                   <input
                     type="text"
-                    className="h-full w-full rounded-2xl border-2 pl-11 pr-4 text-sm text-gray-900 outline-none
+                    className="h-full w-full rounded-2xl border-2 pl-11 pr-4 text-base text-gray-900 outline-none
                                placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 
                                bg-transparent dark:border-gray-700 dark:text-gray-200 dark:placeholder:text-gray-500 
                                dark:focus:border-blue-500 dark:focus:ring-blue-500 transition-colors duration-150"
@@ -300,8 +290,7 @@ export default function MobileBrowseListingPage() {
                               
           {/* Carousel */}
           <div className="mt-2 w-full overflow-hidden">
-              <div
-                  className="flex w-full gap-4 overflow-x-auto px-1 pb-2 snap-x snap-mandatory scroll-smooth scrollbar-hide">
+              <div className="flex w-full gap-4 overflow-x-auto px-1 pb-2 snap-x snap-mandatory scroll-smooth scrollbar-hide">
                   
                   {/* Card 1 */}
                   <div className="w-[85%] shrink-0 snap-start md:w-[48%]">

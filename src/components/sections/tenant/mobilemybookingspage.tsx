@@ -14,10 +14,9 @@ const BookingsFilters = [
 ];
 
 const TenantMobileBookingspage = () => {
-    const [activeFilter, setActiveFilter] = useState("all");
   return (
     <main className="mt-0 flex h-full w-full flex-col px-3 py-3 sm:px-0 sm:py-1">
-      <MobileMyBookings activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
+      <MobileMyBookings />
     </main>
   )
 }

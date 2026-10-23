@@ -35,7 +35,7 @@ interface ActiveBookingProps {
 const ActiveBookings = ({ activeBooking }: ActiveBookingProps) => {
   return (
     <div className="lg:mt-2 flex sm:h-51 lg:h-full flex-col">
-        <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">Active Bookings <span className="text-lg font-semibold text-gray-900 dark:text-white">(1)</span></h2>
+        <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">Active Bookings <span className="text-lg font-semibold text-gray-900 dark:text-white">({activeBooking ? 1 : 0})</span></h2>
 
         {activeBooking ? (
         <div className="flex w-full flex-row lg:flex overflow-hidden rounded-lg border-2 dark:border-none dark:bg-blue-900/15 md:h-72 h-40 md:flex-row">

@@ -116,12 +116,13 @@ export async function POST(request: Request) {
     });
 
     // Generate the key on the server, never from client input.
-    const key =`profile-photos/${user.id}/${randomUUID()}`;
+    const key = `profile-photos/${user.id}/${randomUUID()}`;
 
     const command = new PutObjectCommand({
       Bucket: R2_BUCKET_NAME,
       Key: key,
       ContentType: contentType,
+      ContentLength: size,
     });
 
     const uploadUrl = await getSignedUrl(r2, command, {

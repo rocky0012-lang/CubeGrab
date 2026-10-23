@@ -233,6 +233,25 @@ export async function POST(request: Request) {
       );
     }
 
+    const {data: previous } = await supabase
+    .from("users")
+    .select("profile_photo_url")
+    .eq("id", user.id)
+    .maybeSingle();
+
+    const oldKey = previous?.profile_photo_url
+      ? deriveOwnedKey(previous.profile_photo_url, R2_PUBLIC_URL, user.id) // shared helper with remove route
+      : null;
+    if (oldKey && oldKey !== key) {
+      try {
+        await r2.send(
+          new DeleteObjectCommand({ Bucket: bucket, Key: oldKey})
+      );
+    } catch (cleanupError) {
+      console.error("Failed to delete previous profile photo:", cleanupError);
+      }
+    }
+
     return NextResponse.json(
       {
         success: true,

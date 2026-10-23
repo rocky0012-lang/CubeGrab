@@ -51,7 +51,7 @@ const TenantMobileBottomNav = () => {
   }
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-50 border-t rounded-lg border-slate-200 bg-white/95 backdrop-blur-md dark:border-slate-800 dark:bg-[var(--color-bg-primary-base)] sm:flex md:flex lg:*:hidden">
+    <nav className="fixed inset-x-0 bottom-0 z-50 border-t rounded-lg border-slate-200 bg-white/95 backdrop-blur-md dark:border-slate-800 dark:bg-[var(--color-bg-primary-base)] lg:hidden">
       <div className="flex h-12 w-full items-center justify-around px-0">
         {navigationItems.map((item) => {
           const Icon = item.icon;

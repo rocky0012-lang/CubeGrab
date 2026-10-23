@@ -32,7 +32,8 @@ const ProfileRecentBookingCard = ({booking}: RecentBookingCardProps) => {
     <tr className="hover:bg-slate-50 dark:hover:bg-slate-900/50">
 
             {/* Property */}
-            <td className="flex items-center gap-3 px-4 py-3">
+            <td className="px-4 py-3">
+                <div className="flex items-center gap-3">
                     <Image
                         src={booking.image}
                         alt={booking.propertyName}
@@ -44,6 +45,7 @@ const ProfileRecentBookingCard = ({booking}: RecentBookingCardProps) => {
                     <p className="max-w-[200px] truncate text-sm font-semibold text-slate-900 dark:text-white">
                         {booking.propertyName}
                     </p>
+                </div>
             </td>
 
             {/* Location */}

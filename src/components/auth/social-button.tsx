@@ -27,20 +27,20 @@ const SocialAuthButtons = ({ targetRole }: SocialAuthButtonsProps) => {
   return (
     <div className="flex flex-col gap-0">
       <div className="hidden lg:flex w-auto flex-col gap-3">
-            <SocialButton onClick={() => handleAuthLogin('google')} social="google" theme="brand">
-                Continue with Google
-            </SocialButton>
-            <SocialButton onClick={() => handleAuthLogin('facebook')} social="facebook" theme="brand">
-                Continue with Facebook
-            </SocialButton>
-            <SocialButton onClick={() => handleAuthLogin('apple')} social="apple" theme="brand">
-                Continue with Apple
-            </SocialButton>
+        <SocialButton aria-label="Continue with Google" onClick={() => handleAuthLogin('google')} social="google" theme="brand">
+            Continue with Google
+        </SocialButton>
+        <SocialButton aria-label="Continue with Facebook" onClick={() => handleAuthLogin('facebook')} social="facebook" theme="brand">
+            Continue with Facebook
+        </SocialButton>
+        <SocialButton aria-label="Continue with Apple" onClick={() => handleAuthLogin('apple')} social="apple" theme="brand">
+            Continue with Apple
+        </SocialButton>
       </div>
       <div className="lg:hidden grid w-auto grid-cols-3 gap-3">
-            <SocialButton onClick={() => handleAuthLogin('google')} social="google" theme="brand" />
-            <SocialButton onClick={() => handleAuthLogin('facebook')} social="facebook" theme="brand" />
-            <SocialButton onClick={() => handleAuthLogin('apple')} social="apple" theme="brand" />
+        <SocialButton aria-label="Continue with Google" onClick={() => handleAuthLogin('google')} social="google" theme="brand" />
+        <SocialButton aria-label="Continue with Facebook" onClick={() => handleAuthLogin('facebook')} social="facebook" theme="brand" />
+        <SocialButton aria-label="Continue with Apple" onClick={() => handleAuthLogin('apple')} social="apple" theme="brand" />
       </div>
     </div>
   )

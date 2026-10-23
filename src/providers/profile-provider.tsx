@@ -42,7 +42,7 @@ export function ProfileProvider({
     const value = {
         profile,
         loading,
-        refreshProfile: fetchProfile,
+        refreshProfile: () => fetchProfile(true),
     };
 
 
